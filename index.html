@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>BMI Calculator</title>
+    <style>
+
+        .container {
+            border: 1px solid black;
+            width: 300px;
+            padding: 20px;
+            margin: 20px auto;
+        }
+        .row {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h3>เครื่องคำนวณ BMI</h3>
+    
+    <div class="row">
+        น้ำหนัก (kg): <input type="text" id="w">
+    </div>
+    
+    <div class="row">
+        ส่วนสูง: <input type="text" id="h">
+        <select id="u">
+            <option value="cm">cm</option>
+            <option value="m">m</option>
+        </select>
+    </div>
+    
+    <button onclick="checkBMI()">คำนวณ</button>
+
+    <div style="margin-top: 15px;" id="showResult"></div>
+</div>
+
+<script>
+    function checkBMI() {
+        const weight = document.getElementById('w').value;
+        const height = document.getElementById('h').value;
+        const unit = document.getElementById('u').value;
+        const showResult = document.getElementById('showResult');
+
+
+        fetch(`http://localhost:3000/bmi?weight=${weight}&height=${height}&unit=${unit}`)
+            .then(res => res.json())
+            .then(data => {
+                if (data.error) {
+                    showResult.innerText = "Error: " + data.error;
+                } else {
+                    showResult.innerText = "BMI: " + data.bmi + " (ผลลัพธ์: " + data.category + ")";
+                }
+            });
+    }
+</script>
+
+</body>
+</html>
