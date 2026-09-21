@@ -3,15 +3,107 @@
 <head>
     <title>BMI Calculator</title>
     <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: linear-gradient(135deg, #6dd5ed, #2193b0);
+            min-height: 100vh;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
         .container {
-            border: 1px solid black;
-            width: 300px;
-            padding: 20px;
-            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 16px;
+            width: 340px;
+            padding: 30px 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
+
+        h3 {
+            text-align: center;
+            color: #2193b0;
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+
         .row {
-            margin-bottom: 10px;
+            margin-bottom: 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .row label {
+            font-size: 14px;
+            color: #555;
+            font-weight: 600;
+        }
+
+        .row input[type="text"] {
+            padding: 10px 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            transition: border 0.2s;
+        }
+
+        .row input[type="text"]:focus {
+            border-color: #2193b0;
+        }
+
+        .row-inline {
+            display: flex;
+            gap: 8px;
+        }
+
+        .row-inline input {
+            flex: 1;
+        }
+
+        select {
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            font-size: 14px;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, #2193b0, #6dd5ed);
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.15s, box-shadow 0.15s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 14px rgba(33, 147, 176, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #showResult {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            min-height: 24px;
         }
     </style>
 </head>
@@ -19,22 +111,26 @@
 
 <div class="container">
     <h3>เครื่องคำนวณ BMI</h3>
-    
+
     <div class="row">
-        น้ำหนัก (kg): <input type="text" id="w">
+        <label>น้ำหนัก (kg)</label>
+        <input type="text" id="w" placeholder="เช่น 60">
     </div>
-    
+
     <div class="row">
-        ส่วนสูง: <input type="text" id="h">
-        <select id="u">
-            <option value="cm">cm</option>
-            <option value="m">m</option>
-        </select>
+        <label>ส่วนสูง</label>
+        <div class="row-inline">
+            <input type="text" id="h" placeholder="เช่น 170">
+            <select id="u">
+                <option value="cm">cm</option>
+                <option value="m">m</option>
+            </select>
+        </div>
     </div>
-    
+
     <button onclick="checkBMI()">คำนวณ</button>
 
-    <div style="margin-top: 15px;" id="showResult"></div>
+    <div id="showResult"></div>
 </div>
 
 <script>
@@ -44,14 +140,13 @@
         const unit = document.getElementById('u').value;
         const showResult = document.getElementById('showResult');
 
-
         fetch(`http://localhost:3000/bmi?weight=${weight}&height=${height}&unit=${unit}`)
             .then(res => res.json())
             .then(data => {
                 if (data.error) {
                     showResult.innerText = "Error: " + data.error;
                 } else {
-                    showResult.innerText = "BMI: " + data.bmi + " (ผลลัพธ์: " + data.category + ")";
+                    showResult.innerText = "BMI: " + data.bmi + " (แคลอรี่: " + data.category + ")";
                 }
             });
     }
