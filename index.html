@@ -134,22 +134,33 @@
 </div>
 
 <script>
-    function checkBMI() {
-        const weight = document.getElementById('w').value;
-        const height = document.getElementById('h').value;
-        const unit = document.getElementById('u').value;
-        const showResult = document.getElementById('showResult');
+     function checkBMI() {
+    const weight = parseFloat(document.getElementById('w').value);
+    let height = parseFloat(document.getElementById('h').value);
+    const unit = document.getElementById('u').value;
+    const showResult = document.getElementById('showResult');
 
-        fetch(`http://localhost:3000/bmi?weight=${weight}&height=${height}&unit=${unit}`)
-            .then(res => res.json())
-            .then(data => {
-                if (data.error) {
-                    showResult.innerText = "Error: " + data.error;
-                } else {
-                    showResult.innerText = "BMI: " + data.bmi + " (แคลอรี่: " + data.category + ")";
-                }
-            });
+    if (isNaN(weight) || isNaN(height) || weight <= 0 || height <= 0) {
+        showResult.innerText = "กรุณากรอกน้ำหนักและส่วนสูงให้ถูกต้อง";
+        return;
     }
+
+    // แปลงหน่วยเป็นเมตร
+    if (unit === "cm") {
+        height = height / 100;
+    }
+
+    const bmi = weight / (height * height);
+    let category = "";
+
+    if (bmi < 18.5) category = "น้ำหนักน้อย";
+    else if (bmi < 23) category = "ปกติ";
+    else if (bmi < 25) category = "น้ำหนักเกิน";
+    else if (bmi < 30) category = "อ้วนระดับ 1";
+    else category = "อ้วนระดับ 2";
+
+    showResult.innerText = "BMI: " + bmi.toFixed(2) + " (" + category + ")";
+}
 </script>
 
 </body>
